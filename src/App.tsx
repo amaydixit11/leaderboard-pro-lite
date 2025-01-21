@@ -306,14 +306,6 @@ function App() {
                   <Github className="w-4 h-4" />
                   GitHub
                 </a>
-                <a 
-                  href="https://ingenuityiitbhilai.in"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-600 hover:text-indigo-600 transition-colors"
-                >
-                  Ingenuity IIT Bhilai
-                </a>
               </div>
             </div>
           </div>
