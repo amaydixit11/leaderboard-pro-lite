@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
-import { Trophy, Calendar, CheckCircle2, XCircle, LogIn, Code2, Target, Flame, ExternalLink } from 'lucide-react';
+import { Trophy, Calendar, CheckCircle2, XCircle, LogIn, Code2, Target, Flame, ExternalLink, Github, Heart, Instagram, Linkedin } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import type { User, Problem, Submission } from './lib/types';
 import { useAuth } from './hooks/useAuth';
@@ -258,6 +258,68 @@ function App() {
         </div>
       </main>
 
+      <footer className="bg-white/80 backdrop-blur-sm border-t border-indigo-100">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-gray-600">Made with</span>
+              <Heart className="w-4 h-4 text-red-500 animate-pulse" />
+              <span className="text-gray-600">by</span>
+              <a 
+                href="https://github.com/amaydixit11/" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+              >
+                Amay Dixit
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+            <div className="flex flex-col md:flex-row items-center gap-4">
+              <div className="flex items-center gap-3">
+                <a 
+                  href="https://www.instagram.com/ingenuity_iit_bh/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-pink-600 transition-colors"
+                  title="Follow us on Instagram"
+                >
+                  <Instagram className="w-5 h-5" />
+                </a>
+                <a 
+                  href="https://www.linkedin.com/company/ingenuity-iit-bhilai/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-blue-600 transition-colors"
+                  title="Connect with us on LinkedIn"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+              </div>
+              <div className="flex items-center gap-4">
+                <a 
+                  href="https://github.com/amaydixit11/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors shadow-sm hover:shadow-md"
+                >
+                  <Github className="w-4 h-4" />
+                  GitHub
+                </a>
+                <a 
+                  href="https://ingenuityiitbhilai.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-indigo-600 transition-colors"
+                >
+                  Ingenuity IIT Bhilai
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+
       {/* Leaderboard Modal */}
       {showLeaderboard && (
         <LeaderboardModal
@@ -266,6 +328,8 @@ function App() {
         />
       )}
     </div>
+
+    
   );
 }
 
