@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
-import { Trophy, Calendar, CheckCircle2, XCircle, LogIn } from 'lucide-react';
+import { Trophy, Calendar, CheckCircle2, XCircle, LogIn, Code2, Target, Flame, ExternalLink } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import type { User, Problem, Submission } from './lib/types';
 import { useAuth } from './hooks/useAuth';
@@ -69,9 +69,14 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 py-6 flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-900">Ingenuity POTD Tracker</h1>
+      <header className="bg-white/80 backdrop-blur-sm shadow-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <Code2 className="w-8 h-8 text-indigo-600" />
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              Ingenuity POTD Tracker
+            </h1>
+          </div>
           <div className="flex items-center gap-4">
             {user ? (
               <>
@@ -79,7 +84,7 @@ function App() {
                 {user.email && ['ingenuity@iitbhilai.ac.in', 'amayd@iitbhilai.ac.in', 'priyanshuk@iitbhilai.ac.in'].includes(user.email) && (
                   <Link 
                     to="/admin"
-                    className="text-blue-500 hover:text-blue-600 text-sm font-medium"
+                    className="text-indigo-600 hover:text-indigo-700 text-sm font-medium"
                   >
                     Admin Dashboard
                   </Link>
@@ -94,7 +99,7 @@ function App() {
             ) : (
               <button
                 onClick={signInWithGoogle}
-                className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm hover:shadow-md"
               >
                 <LogIn className="w-4 h-4" />
                 Sign In with Google
@@ -107,39 +112,56 @@ function App() {
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Today's Problem */}
-          <div className="bg-white rounded-xl shadow-sm border border-indigo-100 p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Calendar className="w-6 h-6 text-blue-600" />
+          <div className="bg-white rounded-2xl shadow-sm border border-indigo-100 p-8 transform hover:scale-[1.02] transition-transform">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-3 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl">
+                <Target className="w-6 h-6 text-indigo-600" />
               </div>
-              <h2 className="text-xl font-semibold text-gray-800">Today's Problem</h2>
+              <div>
+                <h2 className="text-xl font-bold text-gray-800">Today's Challenge</h2>
+                <p className="text-gray-500">{format(new Date(), 'MMMM d, yyyy')}</p>
+              </div>
             </div>
             {loading ? (
-              <p className="text-gray-600">Loading problem...</p>
+              <div className="animate-pulse space-y-4">
+                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              </div>
             ) : currentProblem ? (
-              <div>
+              <div className="space-y-4">
                 <a 
                   href={currentProblem.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-sm hover:shadow-md"
                 >
-                  Solve Problem →
+                  <Code2 className="w-5 h-5" />
+                  Solve Today's Problem
+                  <ExternalLink className="w-4 h-4" />
                 </a>
+                <p className="text-sm text-gray-500">
+                  Complete the challenge to earn points and climb the leaderboard!
+                </p>
               </div>
             ) : (
-              <p className="text-gray-600">No problem has been set for today.</p>
+              <div className="text-center py-8">
+                <p className="text-gray-600">No problem has been set for today.</p>
+                <p className="text-sm text-gray-500 mt-2">Check back later!</p>
+              </div>
             )}
           </div>
 
           {/* Leaderboard */}
-          <div className="bg-white rounded-xl shadow-sm border border-indigo-100 p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-indigo-100 p-8">
             <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-yellow-100 rounded-lg">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-xl">
                   <Trophy className="w-6 h-6 text-yellow-600" />
                 </div>
-                <h2 className="text-xl font-semibold text-gray-800">Top Performers</h2>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-800">Top Performers</h2>
+                  <p className="text-gray-500">Leading competitive programmers</p>
+                </div>
               </div>
               <button
                 onClick={() => setShowLeaderboard(true)}
@@ -148,27 +170,38 @@ function App() {
                 View All
               </button>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {users.slice(0, 5).map((user, index) => (
                 <div 
                   key={user.id}
-                  className="flex items-center justify-between p-3 bg-gradient-to-r from-white to-gray-50 rounded-lg border border-gray-100"
+                  className="flex items-center justify-between p-4 bg-gradient-to-r from-white to-gray-50 rounded-xl border border-gray-100 hover:border-indigo-200 transition-colors"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      index === 0 ? 'bg-yellow-100 text-yellow-700' :
-                      index === 1 ? 'bg-gray-100 text-gray-700' :
-                      index === 2 ? 'bg-orange-100 text-orange-700' :
-                      'bg-blue-50 text-blue-700'
-                    }`}>
+                  <div className="flex items-center gap-4">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                      index === 0 ? 'bg-gradient-to-br from-yellow-100 to-yellow-200 text-yellow-700' :
+                      index === 1 ? 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-700' :
+                      index === 2 ? 'bg-gradient-to-br from-orange-100 to-orange-200 text-orange-700' :
+                      'bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700'
+                    } font-bold text-lg`}>
                       {index + 1}
                     </div>
                     <div>
-                      <div className="font-medium text-gray-900">{user.name}</div>
-                      <div className="text-sm text-gray-500">@{user.codeforces_handle}</div>
+                      <div className="font-semibold text-gray-900">{user.name}</div>
+                      <a
+                        href={`https://codeforces.com/profile/${user.codeforces_handle}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+                      >
+                        @{user.codeforces_handle}
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
                     </div>
                   </div>
-                  <span className="font-semibold">{user.points} points</span>
+                  <div className="flex items-center gap-2">
+                    <Flame className="w-5 h-5 text-orange-500" />
+                    <span className="font-bold text-lg">{user.points}</span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -176,30 +209,50 @@ function App() {
         </div>
 
         {/* Recent Submissions */}
-        <div className="mt-8 bg-white rounded-xl shadow-sm border border-indigo-100 p-6">
-          <h2 className="text-xl font-semibold mb-6">Recent Submissions</h2>
-          <div className="space-y-3">
+        <div className="mt-8 bg-white rounded-2xl shadow-sm border border-indigo-100 p-8">
+          <h2 className="text-xl font-bold mb-6 text-gray-800">Recent Submissions</h2>
+          <div className="space-y-4">
             {submissions.length > 0 ? (
               submissions.map((submission) => (
                 <div 
                   key={submission.id}
-                  className="flex items-center justify-between p-3 bg-gradient-to-r from-white to-gray-50 rounded-lg border border-gray-100"
+                  className="flex items-center justify-between p-4 bg-gradient-to-r from-white to-gray-50 rounded-xl border border-gray-100 hover:border-indigo-200 transition-colors"
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-4">
                     {submission.solved ? (
-                      <CheckCircle2 className="w-5 h-5 text-green-500" />
+                      <div className="p-2 bg-green-100 rounded-lg">
+                        <CheckCircle2 className="w-5 h-5 text-green-600" />
+                      </div>
                     ) : (
-                      <XCircle className="w-5 h-5 text-red-500" />
+                      <div className="p-2 bg-red-100 rounded-lg">
+                        <XCircle className="w-5 h-5 text-red-600" />
+                      </div>
                     )}
-                    <span className="font-medium">{submission.user?.name}</span>
-                    <span className="text-sm text-gray-500">
-                      {format(new Date(submission.submitted_at), 'PPp')}
-                    </span>
+                    <div>
+                      <span className="font-medium text-gray-900">{submission.user?.name}</span>
+                      <div className="text-sm text-gray-500">
+                        {format(new Date(submission.submitted_at), 'PPp')}
+                      </div>
+                    </div>
                   </div>
+                  {submission.problem && (
+                    <a
+                      href={submission.problem.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+                    >
+                      View Problem
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  )}
                 </div>
               ))
             ) : (
-              <p className="text-gray-600">No submissions yet.</p>
+              <div className="text-center py-8">
+                <p className="text-gray-600">No submissions yet.</p>
+                <p className="text-sm text-gray-500 mt-2">Be the first to solve today's problem!</p>
+              </div>
             )}
           </div>
         </div>
