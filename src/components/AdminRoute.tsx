@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
-const ALLOWED_EMAILS = ['ingenuity@iitbhilai.ac.in', 'amayd@iitbhilai.ac.in'];
+const ALLOWED_EMAILS = ['ingenuity@iitbhilai.ac.in', 'amayd@iitbhilai.ac.in', 'priyanshuk@iitbhilai.ac.in'];
 
 export function AdminRoute({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();

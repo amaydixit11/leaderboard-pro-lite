@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
-import { Trophy, Calendar, CheckCircle2, XCircle, LogIn, Code2, Target, Flame, ExternalLink, Github, Heart, Instagram, Linkedin } from 'lucide-react';
+import { Trophy, Calendar, CheckCircle2, XCircle, LogIn, Code2, Target, Flame, ExternalLink, Heart, Instagram, Linkedin, Github } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import type { User, Problem, Submission } from './lib/types';
+import type { Contest } from './types/codeforces';
 import { useAuth } from './hooks/useAuth';
+import { useCodeforces } from './hooks/useCodeforces';
 import { Link } from 'react-router-dom';
 import { LeaderboardModal } from './components/LeaderboardModal';
+import { ContestsSection } from './components/contests/ContestsSection';
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
@@ -13,9 +16,17 @@ function App() {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [contests, setContests] = useState<Contest[]>([]);
+
   const { user, signInWithGoogle, signOut } = useAuth();
+  const { fetchContests } = useCodeforces();
 
   useEffect(() => {
+    const loadContests = async () => {
+      const contestData = await fetchContests();
+      setContests(contestData);
+    };
+    loadContests();
     fetchTodaysProblem();
     fetchLeaderboard();
     fetchSubmissions();
@@ -110,7 +121,7 @@ function App() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           {/* Today's Problem */}
           <div className="bg-white rounded-2xl shadow-sm border border-indigo-100 p-8 transform hover:scale-[1.02] transition-transform">
             <div className="flex items-center gap-4 mb-6">
@@ -152,7 +163,7 @@ function App() {
           </div>
 
           {/* Leaderboard */}
-          <div className="bg-white rounded-2xl shadow-sm border border-indigo-100 p-8">
+          <div className="bg-white rounded-2xl shadow-sm border border-indigo-100 p-8 mb-8">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-xl">
@@ -208,54 +219,11 @@ function App() {
           </div>
         </div>
 
-        {/* Recent Submissions */}
-        <div className="mt-8 bg-white rounded-2xl shadow-sm border border-indigo-100 p-8">
-          <h2 className="text-xl font-bold mb-6 text-gray-800">Recent Submissions</h2>
-          <div className="space-y-4">
-            {submissions.length > 0 ? (
-              submissions.map((submission) => (
-                <div 
-                  key={submission.id}
-                  className="flex items-center justify-between p-4 bg-gradient-to-r from-white to-gray-50 rounded-xl border border-gray-100 hover:border-indigo-200 transition-colors"
-                >
-                  <div className="flex items-center gap-4">
-                    {submission.solved ? (
-                      <div className="p-2 bg-green-100 rounded-lg">
-                        <CheckCircle2 className="w-5 h-5 text-green-600" />
-                      </div>
-                    ) : (
-                      <div className="p-2 bg-red-100 rounded-lg">
-                        <XCircle className="w-5 h-5 text-red-600" />
-                      </div>
-                    )}
-                    <div>
-                      <span className="font-medium text-gray-900">{submission.user?.name}</span>
-                      <div className="text-sm text-gray-500">
-                        {format(new Date(submission.submitted_at), 'PPp')}
-                      </div>
-                    </div>
-                  </div>
-                  {submission.problem && (
-                    <a
-                      href={submission.problem.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
-                    >
-                      View Problem
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
-                </div>
-              ))
-            ) : (
-              <div className="text-center py-8">
-                <p className="text-gray-600">No submissions yet.</p>
-                <p className="text-sm text-gray-500 mt-2">Be the first to solve today's problem!</p>
-              </div>
-            )}
-          </div>
-        </div>
+        <ContestsSection 
+          contests={contests}
+          userHandles={users.map(u => u.codeforces_handle).filter(Boolean)}
+        />
+
       </main>
 
       <footer className="bg-white/80 backdrop-blur-sm border-t border-indigo-100">
@@ -312,7 +280,6 @@ function App() {
         </div>
       </footer>
 
-      {/* Leaderboard Modal */}
       {showLeaderboard && (
         <LeaderboardModal
           users={users}
@@ -320,8 +287,6 @@ function App() {
         />
       )}
     </div>
-
-    
   );
 }
 
