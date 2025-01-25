@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
-import { Trophy, Calendar, CheckCircle2, XCircle, LogIn, Code2, Target, Flame, ExternalLink, Heart, Instagram, Linkedin, Github } from 'lucide-react';
+import { Trophy, LogIn, Code2, Target, Flame, ExternalLink, Heart, Instagram, Linkedin, Github } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import type { User, Problem, Submission } from './lib/types';
 import type { Contest } from './types/codeforces';
